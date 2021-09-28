@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StartWith/EndWith</title>
+</head>
+<body>
+    <script>
+        // startWith() / endsWith() метод появился в ECMAScript6
+        // Метод startsWith() возвращает true, если строка начинается с указанной строки, в противном случае - false.
+        // string.startsWith(searchvalue, start)
+        // searchvalue - Необходимый. Строка для поиска
+        // start - Не обязательный. По умолчанию 0. С какой позиции начать поиск.
+        // startWith() / endsWith() - чувствительны к регистру!
+
+        var testString = "Hello world!";
+        var testAnswer = testString.startsWith("ll", 2);
+        //console.log(testAnswer);
+
+        // string.endsWith(searchvalue, length)
+        // searchvalue - Необходимый. Строка для поиска
+        // length - Не обязательный. По умолчанию является длина строки. Длина строки для поиска.
+
+        var endWithString = "Hello world, Im learing javascript!";
+        var endWithAnswer = endWithString.endsWith("world", 11);
+        //console.log(endWithAnswer);
+
+        // до ES6
+        function startsWith(str, word) {
+            return str.lastIndexOf(word, 0) === 0;
+        }
+        var startRes = startsWith("Welcome to earth.","Welcome"); //true
+        console.log(startRes);
+
+        function endsWith(str, ending){
+            return str.indexOf(ending, str.length - ending.length) !== -1;
+        }
+
+        var endRes = endsWith("Hello world!", 'world!');// true
+        console.log(endRes);
+    </script>
+</body>
+</html>
