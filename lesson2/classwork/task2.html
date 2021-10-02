@@ -1,110 +1,163 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="utf-8" />
-  <title>ITEA-JS ADVANCED - LESSON 2: CLASSWORK 2</title>
-  <link rel="stylesheet" href="css/style.min.css" />
+    <meta charset="utf-8" />
+    <title>ITEA-JS ADVANCED - LESSON 2: CLASSWORK 2</title>
+    <link rel="stylesheet" href="css/style.min.css" />
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="testBlock hover">
-      <button class="iButton" id="mouseHover">1. Hover!</button>
-      <ul id="hoverResult" class="resultBlock">
-        <li class="red">Hovered!</li>
-        <li class="blue">Hovered!</li>
-        <li class="orange">Hovered!</li>
-        <li class="orange">Hovered!</li>
-        <li class="purple">Hovered!</li>
-      </ul>
+    <div class="wrap">
+        <div class="testBlock hover">
+            <button class="iButton" id="mouseHover">1. Hover!</button>
+            <ul id="hoverResult" class="resultBlock">
+                <li class="red">Hovered!</li>
+                <li class="blue">Hovered!</li>
+                <li class="orange">Hovered!</li>
+                <li class="orange">Hovered!</li>
+                <li class="purple">Hovered!</li>
+            </ul>
+        </div>
+
+        <div class="testBlock click">
+            <button class="iButton" id="mouseClick">2. Click for do things</button>
+            <div id="clickResult" class="resultBlock one two three four five six"></div>
+        </div>
+
+        <div class="testBlock random">
+            <button class="iButton" id="mouseLight">
+          3. Click for turn on lights
+        </button>
+            <div id="lightResult" class="resultBlock"></div>
+        </div>
+
+        <div class="testBlock keyboard">
+            <button class="iButton" id="keyboardButton">4. Press any key</button>
+            <div id="keyboardResult" class="resultBlock key-colors"></div>
+        </div>
     </div>
 
-    <div class="testBlock click">
-      <button class="iButton" id="mouseClick">2. Click for do things</button>
-      <div id="clickResult" class="resultBlock one two three four five six"></div>
-    </div>
+    <script>
+        var my_colors = ['red', 'blue', 'green', 'orange', 'purple']
 
-    <div class="testBlock random">
-      <button class="iButton" id="mouseLight">3. Click for turn on lights</button>
-      <div id="lightResult" class="resultBlock"></div>
-    </div>
+        function getRandomColor(min, max) {
+            min = Math.ceil(min)
+            max = Math.floor(max)
+            return Math.floor(Math.random() * (max - min + 1)) + min
+        }
+        var mouseHover = document.getElementById('mouseHover')
+        var mouseClick = document.getElementById('mouseClick')
+        var mouseLight = document.getElementById('mouseLight')
+        var keyboardButton = document.getElementById('keyboardButton')
+        mouseHover.onmouseenter = function(e) {
+                var myElements = document.createElement('li')
+                myElements.innerText = 'hovered!'
+                myElements.classList.add(
+                    my_colors[getRandomColor(0, my_colors.length - 1)]
+                )
+                console.log('hover')
+                document.getElementById('hoverResult').appendChild(myElements)
+            }
+            //task#2
 
-    <div class="testBlock keyboard">
-      <button class="iButton" id="keyboardButton">4. Press any key</button>
-      <div id="keyboardResult" class="resultBlock key-colors"></div>
-    </div>
+        var clickIndex = 0
+        var direction = true
+        var myNumbers = ['one', 'two', 'three', 'four', 'five', 'six']
+        var backNumbers = ['six', 'two', 'three', 'four', 'one', 'five']
+        mouseClick.onclick = function(e) {
+            var myNum = e.target.nextElementSibling
+            if (direction) {
+                for (var item of backNumbers) {
+                    if (myNum.matches('.' + item)) {
+                        myNum.classList.remove(item)
+                        if (backNumbers[backNumbers.length - 1] == item) {
+                            direction = !direction
+                        }
+                        return
+                    }
+                }
+            } else {
+                for (var item of myNumbers) {
+                    if (!myNum.matches('.' + item)) {
+                        myNum.classList.add(item)
+                        if (myNumbers[myNumbers.length - 1] == item) {
+                            direction = !direction
+                        }
+                        return
+                    }
+                }
+            }
+        }
 
-  </div>
+        //task#3
+        var colors3 = ['red', 'yellow', 'green']
+        var counter = 0
+        mouseLight.onclick = function(e) {
+                if (counter === colors3.length) {
+                    counter = 0
+                }
+                var myColors = colors3[counter]
+                e.target.nextElementSibling.innerText = myColors
+                console.log('light')
 
-  <script>
-    /*
+                counter++
+            }
+            //task#4
+        var getButton = document.querySelector('#keyboardButton')
 
-      Поработаем немного с ивентами:
-      onmouseenter
-      onclick
-      oncontextmenu
-      onkeydown
+        var counter = 0
+        getButton.onkeydown = function(e) {
+                var number4 = e.target.nextElementSibling
+                number4.innerText = counter
+                var number_counts = counter.toString().split('')
+                var index = counter % 10
+                var numbers4 = [
+                    'zero',
+                    'one',
+                    'two',
+                    'three',
+                    'four',
+                    'five',
+                    'six',
+                    'seven',
+                    'eight',
+                    'nine'
+                ]
+                number4.className = 'resultBlock key-colors ' + numbers4[index]
 
-      Задание:
-      На каждую из конопок назначить действие которое будет выполнять следующее действие:
-      1.На ховер(onmouseenter) повесить обработчик который будет при каждом наведении
-        на кнопку будет выводить в блок результатом елемент li с текстом "hovered!"
-        у которого будет один из следующих класов:
-        red blue green orange purple
-
-      2.На кнопку клика(onclick) повесить обработчик который будет удалять классы с
-        блока с результатом по очереди в таком порядке:
-
-        six > two > three > four > one > five
-
-        после того как блок окажется пустым, добавить их в порядке возрастания
-
-        one > two > three ... > six
-
-      3. На кнопку клика (Light) повесить обработчик, который будет выводить в 
-      блок с результатом (lightResult) поочередно один из цветов светофора:
-      Цикл: Off -> Red -> Yellow -> Green -> Off
-
-      4. На кнопку с обработчиком нажатия (onkeydown) повесить обработчик который будет:
-
-        - Выводить в блок с результатом(keyboardResult) число нажатий на любую из клавиш клавиатуры.
-        - Давать блоку (keyboardResult) классы, которые соотсветствуют числу кликов:
-
-        Н-р:
-        1 -> one
-        3 -> three
-        5 -> five
-        11 -> one one
-        115 -> one one five
-
-
-
-    */
-
-    var mouseHover = document.getElementById('mouseHover');
-    var mouseClick = document.getElementById('mouseClick');
-    var mouseLight = document.getElementById('mouseLight');
-    var keyboardButton = document.getElementById('keyboardButton');
-
-    mouseHover.onmouseenter = function(){
-      console.log('hover');
-    }
-
-    var clickIndex = 0;
-    var direction = true;
-
-    mouseClick.onclick = function(){
-        console.log('click');
-    }
-
-
-    mouseLight.onclick = function(e){
-        console.log('light');
-    }
-
-    var counter = 0;
-    keyboardButton.onkeydown = function(){
-        console.log('keydown');
-    }
-  </script>
+                counter++
+                console.log('keydown')
+            }
+            //     Поработаем немного с ивентами:
+            //   onmouseenter
+            //   onclick
+            //   oncontextmenu
+            //   onkeydown
+            //   Задание:
+            //   На каждую из конопок назначить действие которое будет выполнять следующее действие:
+            //   1.На ховер(onmouseenter) повесить обработчик который будет при каждом наведении
+            //     на кнопку будет выводить в блок результатом елемент li с текстом "hovered!"
+            //     у которого будет один из следующих класов:
+            //     red blue green orange purple
+            //   2.На кнопку клика(onclick) повесить обработчик который будет удалять классы с
+            //     блока с результатом по очереди в таком порядке:
+            //     six > two > three > four > one > five
+            //     после того как блок окажется пустым, добавить их в порядке возрастания
+            //     one > two > three ... > six
+            //   3. На кнопку клика (Light) повесить обработчик, который будет выводить в
+            //   блок с результатом (lightResult) поочередно один из цветов светофора:
+            //   Цикл: Off -> Red -> Yellow -> Green -> Off
+            //   4. На кнопку с обработчиком нажатия (onkeydown) повесить обработчик который будет:
+            //     - Выводить в блок с результатом(keyboardResult) число нажатий на любую из клавиш клавиатуры.
+            //     - Давать блоку (keyboardResult) классы, которые соотсветствуют числу кликов:
+            //     Н-р:
+            //     1 -> one
+            //     3 -> three
+            //     5 -> five
+            //     11 -> one one
+            //     115 -> one one five
+    </script>
 </body>
+
 </html>
